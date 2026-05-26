@@ -5,9 +5,16 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     bio = models.TextField(max_length=500, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    follower = models.ManyToManyField(User, related_name='following', blank=True)
     
     def __str__(self):
         return f"{self.user.username}'s Profile"
+    
+    def total_followers(self):
+        return self.followers.count()
+    
+    def total_following(self):
+        return User.objects.filter(following=self).count()
     
 
 class Post(models.Model):
@@ -16,9 +23,13 @@ class Post(models.Model):
     content = models.TextField(max_length=1000)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    likes =models.ManyToManyField(User, related_name='liked_posts', blank=True)
     
     def __str__(self):
         return f"{self.author.username}: {self.content[:50]}"
+    
+    def total_likes(self):
+        return self.likes.count()
     
 
 class Comment(models.Model):
