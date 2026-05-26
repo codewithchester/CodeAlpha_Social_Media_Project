@@ -1,0 +1,7 @@
+{
+    "editor.acceptSuggestionOnCommitCharacter": false,
+    "editor.acceptSuggestionOnEnter": "off",
+    "editor.screenReaderAnnounceInlineSuggestion": false,
+    "editor.snippetSuggestions": "none",
+    "editor.inlineSuggest.suppressInSnippetMode": false
+}
