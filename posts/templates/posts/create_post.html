@@ -1,56 +1,398 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Create Post</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create New Post - SocialHub</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
         }
-        .form-container {
+
+        /* Navigation Bar */
+        .navbar {
             background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
         }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 24px;
+            font-weight: bold;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #4a5568;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: #667eea;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .username {
+            font-weight: 500;
+            color: #2d3748;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 700px;
+            margin: 80px auto 40px;
+        }
+
+        /* Form Card */
+        .form-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            overflow: hidden;
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .card-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            text-align: center;
+        }
+
+        .card-header h1 {
+            color: white;
+            font-size: 28px;
+            margin-bottom: 8px;
+        }
+
+        .card-header p {
+            color: rgba(255,255,255,0.9);
+            font-size: 14px;
+        }
+
+        .card-body {
+            padding: 40px;
+        }
+
+        /* Form Styling */
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: #2d3748;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
         textarea {
             width: 100%;
-            padding: 10px;
+            padding: 15px;
             font-size: 16px;
-            border: 1px solid #ddd;
-            border-radius: 4px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-family: inherit;
+            resize: vertical;
+            transition: all 0.3s;
         }
-        button {
-            background-color: #1a73e8;
+
+        textarea:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea::placeholder {
+            color: #a0aec0;
+        }
+
+        /* Character Counter */
+        .char-counter {
+            text-align: right;
+            font-size: 12px;
+            color: #a0aec0;
+            margin-top: 8px;
+        }
+
+        .char-counter.warning {
+            color: #ecc94b;
+        }
+
+        .char-counter.danger {
+            color: #e53e3e;
+        }
+
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 10px 20px;
+            padding: 14px;
             border: none;
-            border-radius: 4px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
             cursor: pointer;
-            margin-top: 10px;
+            transition: transform 0.2s, box-shadow 0.2s;
         }
-        button:hover {
-            background-color: #1557b0;
+
+        .btn-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
         }
-        a {
-            color: #1a73e8;
+
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+
+        /* Back Link */
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: #667eea;
             text-decoration: none;
+            font-weight: 500;
+            margin-top: 20px;
+            transition: gap 0.3s;
+        }
+
+        .back-link:hover {
+            gap: 12px;
+        }
+
+        /* Alert Messages */
+        .alert {
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .alert-error {
+            background: #fed7d7;
+            color: #c53030;
+            border-left: 4px solid #c53030;
+        }
+
+        .alert-success {
+            background: #c6f6d5;
+            color: #276749;
+            border-left: 4px solid #276749;
+        }
+
+        /* Loading State */
+        .btn-submit.loading {
+            opacity: 0.7;
+            cursor: not-allowed;
+        }
+
+        .btn-submit.loading::after {
+            content: " ...";
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 40px;
+            color: rgba(255,255,255,0.7);
+            font-size: 12px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 20px 15px;
+            }
+            
+            .container {
+                margin: 70px auto 20px;
+            }
+            
+            .card-body {
+                padding: 25px;
+            }
+            
+            .card-header h1 {
+                font-size: 24px;
+            }
+            
+            .nav-container {
+                padding: 12px 15px;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="form-container">
-        <h1>Create New Post</h1>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">SocialHub</div>
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <div class="user-info">
+                        <span class="username">👋 {{ user.username }}</span>
+                        <a href="{% url 'home' %}">Home</a>
+                        <a href="{% url 'profile' user.username %}">Profile</a>
+                        <a href="/accounts/logout/" style="color: #e53e3e;">Logout</a>
+                    </div>
+                {% else %}
+                    <a href="/accounts/login/">Login</a>
+                    <a href="/accounts/signup/">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="form-card">
+            <div class="card-header">
+                <h1>✍️ Create New Post</h1>
+                <p>Share what's on your mind with the community</p>
+            </div>
+            
+            <div class="card-body">
+                <!-- Display error messages -->
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">
+                            {% if message.tags == 'success' %}✅{% else %}⚠️{% endif %}
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                
+                <form method="POST" id="postForm">
+                    {% csrf_token %}
+                    
+                    <div class="form-group">
+                        <label for="id_content">📝 What's on your mind?</label>
+                        {{ form.content }}
+                        <div class="char-counter" id="charCounter">
+                            <span id="charCount">0</span> / 1000 characters
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn-submit" id="submitBtn">
+                        🚀 Publish Post
+                    </button>
+                </form>
+                
+                <div style="text-align: center; margin-top: 25px;">
+                    <a href="{% url 'home' %}" class="back-link">
+                        ← Back to Home
+                    </a>
+                </div>
+            </div>
+        </div>
         
-        <form method="POST">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">Post</button>
-        </form>
-        
-        <p><a href="{% url 'home' %}">← Back to Home</a></p>
+        <div class="footer">
+            <p>SocialHub - Connect, Share, Engage</p>
+        </div>
     </div>
+
+    <script>
+        // Character counter functionality
+        const textarea = document.querySelector('textarea');
+        const charCountSpan = document.getElementById('charCount');
+        const charCounter = document.querySelector('.char-counter');
+        
+        function updateCharCount() {
+            const length = textarea.value.length;
+            charCountSpan.textContent = length;
+            
+            // Change color based on character count
+            charCounter.classList.remove('warning', 'danger');
+            if (length > 800) {
+                charCounter.classList.add('warning');
+            }
+            if (length > 950) {
+                charCounter.classList.add('danger');
+            }
+        }
+        
+        if (textarea) {
+            // Set initial count
+            updateCharCount();
+            
+            // Update on input
+            textarea.addEventListener('input', updateCharCount);
+            
+            // Add maxlength attribute
+            textarea.setAttribute('maxlength', '1000');
+        }
+        
+        // Form submission loading state
+        const form = document.getElementById('postForm');
+        const submitBtn = document.getElementById('submitBtn');
+        
+        form.addEventListener('submit', function() {
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+        });
+        
+        // Auto-resize textarea (optional)
+        function autoResize(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 300) + 'px';
+        }
+        
+        if (textarea) {
+            textarea.addEventListener('input', function() {
+                autoResize(this);
+            });
+        }
+    </script>
 </body>
 </html>

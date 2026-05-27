@@ -2,8 +2,12 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic
 from .models import Post, Comment, Profile
 from .forms import PostForm, CommentForm
+
 
 def home(request):
     """Display all posts on the homepage"""
@@ -112,3 +116,10 @@ def like_post(request, post_id):
     
     # Go back to the page user came from
     return redirect(request.META.get('HTTP_REFERER', 'home'))
+
+
+
+class SignUpView(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'registration/signup.html'
